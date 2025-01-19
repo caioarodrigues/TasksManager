@@ -1,4 +1,4 @@
-package com.seuprojeto.taskmanager
+package com.example.tasksmanager
 
 data class Task(
     var title: String,

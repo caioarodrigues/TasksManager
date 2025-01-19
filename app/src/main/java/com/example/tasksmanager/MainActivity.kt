@@ -1,5 +1,6 @@
-package com.seuprojeto.taskmanager
+package com.example.tasksmanager
 
+import com.example.tasksmanager.classes.DB
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.widget.Button
@@ -8,16 +9,21 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.tasksmanager.R
 
 class MainActivity : AppCompatActivity() {
-
+    private val db: DB = DB.getInstance()
     private val tasks = mutableListOf<Task>()
     private lateinit var taskAdapter: TaskAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        db.populate()
+        val mockedTasks = db.getTasks()
+
+        for (mock in mockedTasks) {
+            tasks.add(mock)
+        }
 
         val recyclerView: RecyclerView = findViewById(R.id.recyclerViewTasks)
         val btnAddTask: Button = findViewById(R.id.btnAddTask)
