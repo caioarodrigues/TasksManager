@@ -1,16 +1,17 @@
 package com.example.tasksmanager
 
-import com.example.tasksmanager.classes.DB
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.widget.Button
 import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.tasksmanager.classes.DB
 
 class MainActivity : AppCompatActivity() {
+
     private val db: DB = DB.getInstance()
     private val tasks = mutableListOf<Task>()
     private lateinit var taskAdapter: TaskAdapter
@@ -18,20 +19,16 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        db.populate()
-        val mockedTasks = db.getTasks()
 
-        for (mock in mockedTasks) {
-            tasks.add(mock)
-        }
+        db.populate()
+        tasks.addAll(db.getTasks())
 
         val recyclerView: RecyclerView = findViewById(R.id.recyclerViewTasks)
-        val btnAddTask: Button = findViewById(R.id.btnAddTask)
-
+        recyclerView.layoutManager = GridLayoutManager(this, 2)
         taskAdapter = TaskAdapter(tasks, ::editTask, ::deleteTask)
-        recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = taskAdapter
 
+        val btnAddTask: Button = findViewById(R.id.btnAddTask)
         btnAddTask.setOnClickListener {
             showTaskDialog()
         }
@@ -51,22 +48,28 @@ class MainActivity : AppCompatActivity() {
             .setTitle(if (task == null) "Adicionar Tarefa" else "Editar Tarefa")
             .setView(dialogView)
             .setPositiveButton("Salvar") { _, _ ->
-                val title = etTitle.text.toString()
-                val description = etDescription.text.toString()
+                val title = etTitle.text.toString().trim()
+                val description = etDescription.text.toString().trim()
 
-                if (task == null) {
-                    tasks.add(Task(title, description))
-                } else {
-                    task.title = title
-                    task.description = description
-                    position?.let { taskAdapter.notifyItemChanged(it) }
+                if (title.isNotEmpty() && description.isNotEmpty()) {
+                    if (task == null) {
+                        val newTask = Task(title, description)
+                        tasks.add(newTask)
+                        taskAdapter.notifyItemInserted(tasks.size - 1)
+                    } else {
+                        task.title = title
+                        task.description = description
+                        position?.let { taskAdapter.notifyItemChanged(it) }
+                    }
                 }
-                taskAdapter.notifyDataSetChanged()
             }
             .setNegativeButton("Cancelar", null)
             .show()
     }
 
+    private fun createTask () {
+
+    }
     private fun editTask(position: Int) {
         showTaskDialog(tasks[position], position)
     }

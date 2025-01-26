@@ -1,12 +1,14 @@
 package com.example.tasksmanager
 
+import android.graphics.Paint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.Button
+import android.widget.CheckBox
+import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
-import com.example.tasksmanager.R
-import com.example.tasksmanager.Task
 
 class TaskAdapter(
     private val tasks: MutableList<Task>,
@@ -34,8 +36,11 @@ class TaskAdapter(
         holder.tvDescription.text = task.description
         holder.cbCompleted.isChecked = task.isCompleted
 
+        updateTaskStyle(holder, task.isCompleted)
+
         holder.cbCompleted.setOnCheckedChangeListener { _, isChecked ->
             task.isCompleted = isChecked
+            updateTaskStyle(holder, isChecked)
         }
 
         holder.btnEdit.setOnClickListener {
@@ -48,4 +53,23 @@ class TaskAdapter(
     }
 
     override fun getItemCount(): Int = tasks.size
+
+    private fun updateTaskStyle(holder: TaskViewHolder, isCompleted: Boolean) {
+        if (isCompleted) {
+            holder.tvTitle.paintFlags = holder.tvTitle.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+            holder.tvDescription.paintFlags =
+                holder.tvDescription.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+            holder.itemView.alpha = 0.6f
+            holder.btnEdit.isVisible = false
+            holder.btnDelete.isVisible = false
+        } else {
+            holder.tvTitle.paintFlags =
+                holder.tvTitle.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
+            holder.tvDescription.paintFlags =
+                holder.tvDescription.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
+            holder.itemView.alpha = 1.0f
+            holder.btnEdit.isVisible = true
+            holder.btnDelete.isVisible = true
+        }
+    }
 }
