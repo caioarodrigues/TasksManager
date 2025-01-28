@@ -12,11 +12,21 @@
         android:id="@+id/etTaskTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Título da Tarefa" />
+        android:textColor="@color/material_dynamic_secondary20"
+        android:textColorHint="@color/material_dynamic_secondary50"
+        android:hint="Título da Tarefa"
+        android:background="@drawable/edit_text_border"
+        android:padding="12dp" />
 
     <EditText
+        android:layout_marginTop="4dp"
         android:id="@+id/etTaskDescription"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Descrição da Tarefa" />
+        android:textColor="@color/material_dynamic_secondary20"
+        android:textColorHint="@color/material_dynamic_secondary50"
+        android:hint="Descrição da Tarefa"
+        android:background="@drawable/edit_text_border"
+        android:padding="12dp" />
+
 </LinearLayout>

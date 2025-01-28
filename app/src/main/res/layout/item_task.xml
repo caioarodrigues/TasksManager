@@ -13,6 +13,7 @@
         android:layout_height="wrap_content"
         android:text="Título da Tarefa"
         android:textSize="18sp"
+        android:textColor="@color/material_dynamic_secondary50"
         android:textStyle="bold" />
 
     <TextView
@@ -20,12 +21,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Descrição da tarefa"
+        android:textColor="@color/material_dynamic_secondary60"
         android:textSize="14sp" />
 
     <CheckBox
         android:id="@+id/cbTaskCompleted"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="@color/material_dynamic_secondary50"
         android:text="Concluída" />
 
     <LinearLayout
